@@ -43,7 +43,7 @@ paths:
           type: string
       responses:
         "200":
-          description: Successful operation
+          description: successful operation
           content:
             application/json:
               schema:
@@ -134,7 +134,7 @@ paths:
           type: string
       responses:
         "200":
-          description: Successful operation
+          description: successful operation
           content:
             application/json:
               schema:
@@ -163,9 +163,6 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: Successful operation
-          content: {}
         "400":
           description: Invalid UID supplied
           content: {}
