@@ -45,7 +45,15 @@ paths:
       parameters:
       - name: name
         in: query
-        description: Status values that need to be considered for filter
+        description: Name prefix to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: phone
+        in: query
+        description: Phone prefix to search for
         required: false
         style: form
         explode: true
@@ -238,7 +246,23 @@ paths:
       parameters:
       - name: name
         in: query
-        description: Status values that need to be considered for filter
+        description: Name prefix to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: phone
+        in: query
+        description: Phone prefix to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: organization_uid
+        in: query
+        description: organization_uid to search for
         required: false
         style: form
         explode: true
@@ -421,6 +445,223 @@ paths:
       - partner_auth:
         - write:office
         - read:office
+  /patient:
+    get:
+      tags:
+      - patient
+      summary: Finds patients
+      description: Find patients according to optional filter parameters
+      operationId: getPatients
+      parameters:
+      - name: name
+        in: query
+        description: Name prefix to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: phone
+        in: query
+        description: Phone prefix to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: office_uid
+        in: query
+        description: office_uid to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: organization_uid
+        in: query
+        description: organization_uid to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Patient'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - read:patient
+    put:
+      tags:
+      - patient
+      summary: Update an existing patient
+      operationId: updatePatient
+      requestBody:
+        description: Patient object that needs to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Patient not found
+          content: {}
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - write:patient
+        - read:patient
+      x-codegen-request-body-name: body
+    post:
+      tags:
+      - patient
+      summary: Add a new patient to the given partner
+      operationId: addPatient
+      requestBody:
+        description: Patient object that needs to be added
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - write:patient
+        - read:patient
+      x-codegen-request-body-name: body
+  /patient/{patientUid}:
+    get:
+      tags:
+      - patient
+      summary: Find patient by UID
+      description: Returns a single patient
+      operationId: getPatient
+      parameters:
+      - name: patientUid
+        in: path
+        description: UID of patient to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Patient not found
+          content: {}
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - read:patient
+    delete:
+      tags:
+      - patient
+      summary: Deletes an patient
+      operationId: deletePatient
+      parameters:
+      - name: patientUid
+        in: path
+        description: Patient UID to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content: {}
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Patient not found
+          content: {}
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - write:patient
+        - read:patient
 components:
   schemas:
     Organization:
