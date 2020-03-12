@@ -1,0 +1,154 @@
+openapi: 3.0.1
+info:
+  title: RCP Partner Webhook API
+  description: RCP Partner Webhook API allows receiving asynchronous information from
+    RCP.
+  contact:
+    email: info@remotecarepartners.com
+  version: 0.1.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: https://{customerUrl}
+  variables:
+    customerUrl:
+      description: Customer Webhook URL
+      default: rennovahealth.com/rpcwebhook
+tags:
+- name: order
+  description: Order
+  externalDocs:
+    description: GitHub
+    url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/orders.md
+paths:
+  /order:
+    put:
+      tags:
+      - order
+      summary: Order has been updated in RCP
+      description: Typical scenario is order being processed (status = closed) and
+        hub/devices being assigned to patient and sent
+      operationId: updateOrder
+      requestBody:
+        description: Order object that has been updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content: {}
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Order not found
+          content: {}
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - write:order
+        - read:order
+      x-codegen-request-body-name: body
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        uid:
+          type: string
+          description: Unique (for domain) id of order, no special characters allowed.
+        patient_uid:
+          type: string
+          description: UID of valid patient.
+        status:
+          type: string
+          description: Order status
+          enum:
+          - created
+          - closed
+        name:
+          type: string
+          description: Contact name.
+        surname:
+          type: string
+          description: Contact surname.
+        email:
+          type: string
+          description: Contact email.
+        phone:
+          type: string
+          description: Contact phone
+        address:
+          description: Contact address
+          allOf:
+          - $ref: '#/components/schemas/Address'
+        device_types:
+          type: array
+          description: Ordered device types
+          items:
+            $ref: '#/components/schemas/OrderDevice'
+    Address:
+      required:
+      - street
+      type: object
+      properties:
+        street:
+          type: string
+          description: Street name
+        code:
+          type: string
+          description: ZIP code
+        city:
+          type: string
+          description: City name
+        province:
+          type: string
+          description: Province name
+        state:
+          type: string
+          description: State name
+        country:
+          type: string
+          description: Country name
+    OrderDevice:
+      type: string
+      enum:
+      - hub
+      - scale_bodyfat
+      - scale_only_weight
+      - heartrate
+      - pulseoximeter
+      - bpm_small_cuff
+      - bpm_medium_cuff
+      - bpm_large_cuff
+      - glucose
+      - thermometer
+      - spirometer
+    Error:
+      required:
+      - code
+      - description
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        description:
+          type: string
+          description: Error description in English
+  securitySchemes:
+    partner_auth:
+      type: http
+      scheme: basic
