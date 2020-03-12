@@ -960,6 +960,12 @@ components:
         patient_uid:
           type: string
           description: UID of valid patient.
+        status:
+          type: string
+          description: Order status
+          enum:
+          - created
+          - closed
         name:
           type: string
           description: Contact name.
