@@ -69,6 +69,12 @@ paths:
               $ref: '#/components/schemas/Organization'
         required: true
       responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
         "400":
           description: Invalid ID supplied
           content: {}
@@ -96,6 +102,12 @@ paths:
               $ref: '#/components/schemas/Organization'
         required: true
       responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
         "405":
           description: Invalid input
           content: {}
