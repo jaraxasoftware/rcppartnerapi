@@ -34,6 +34,11 @@ tags:
   externalDocs:
     description: GitHub
     url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/patients.md
+- name: order
+  description: Order
+  externalDocs:
+    description: GitHub
+    url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/orders.md
 paths:
   /organization:
     get:
@@ -720,13 +725,50 @@ components:
         surname:
           type: string
           description: Patient surname.
-        birth_time:
-          $ref: '#/components/schemas/Timestamp'
+        email:
+          type: string
+          description: Patient email.
         phone:
           type: string
           description: Phone
         address:
+          description: Patient address
+          anyOf:
+          - $ref: '#/components/schemas/Address'
+        birth_time:
+          description: Patient birthdate (Required for Bodyfat scale)
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+        height:
+          type: integer
+          description: Patient height in cm (Required for Bodyfat scale)
+    Order:
+      type: object
+      properties:
+        uid:
+          type: string
+          description: Unique (for domain) id of order, no special characters allowed.
+        patient_uid:
+          type: string
+          description: UID of valid patient.
+        name:
+          type: string
+          description: Contact name.
+        surname:
+          type: string
+          description: Contact surname.
+        email:
+          type: string
+          description: Contact email.
+        phone:
+          type: string
+          description: Contact Phone
+        address:
           $ref: '#/components/schemas/Address'
+        device_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderDevice'
     Timestamp:
       type: string
       example: 1990-10-04T00:00:00Z
@@ -756,6 +798,20 @@ components:
         country:
           type: string
           description: Country name
+    OrderDevice:
+      type: string
+      enum:
+      - hub
+      - scale_bodyfat
+      - scale_only_weight
+      - heartrate
+      - pulseoximeter
+      - bpm_small_cuff
+      - bpm_medium_cuff
+      - bpm_large_cuff
+      - glucose
+      - thermometer
+      - spirometer
     Error:
       required:
       - code
