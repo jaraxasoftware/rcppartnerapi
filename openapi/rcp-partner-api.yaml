@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: RCP Partner API
-  description: RCP Partner API allows managing data related with a single partner
+  description: RCP Partner API allows managing data belonging to a single partner
     through a simple API that have access to any data related to that partner.
   contact:
     email: info@remotecarepartners.com
