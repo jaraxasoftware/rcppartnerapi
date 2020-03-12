@@ -68,7 +68,7 @@ components:
       properties:
         uid:
           type: string
-          description: Unique (for domain) id of order, no special characters allowed.
+          description: UID of order.
         patient_uid:
           type: string
           description: UID of valid patient.
