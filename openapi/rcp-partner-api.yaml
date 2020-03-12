@@ -875,8 +875,7 @@ components:
       properties:
         uid:
           type: string
-          description: Unique (for domain) id of organization, no special characters
-            allowed.
+          description: UID of organization.
         name:
           type: string
           description: User friendly description.
@@ -893,7 +892,7 @@ components:
       properties:
         uid:
           type: string
-          description: Unique (for domain) id of office, no special characters allowed.
+          description: UID of office.
         organization_uid:
           type: string
           description: UID of valid organization.
@@ -913,7 +912,7 @@ components:
       properties:
         uid:
           type: string
-          description: Unique (for domain) id of patient, no special characters allowed.
+          description: UID of patient.
         office_uid:
           type: string
           description: UID of valid office.
@@ -948,7 +947,7 @@ components:
       properties:
         uid:
           type: string
-          description: Unique (for domain) id of order, no special characters allowed.
+          description: UID of order.
         patient_uid:
           type: string
           description: UID of valid patient.
