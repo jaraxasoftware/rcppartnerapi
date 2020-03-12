@@ -29,6 +29,11 @@ tags:
   externalDocs:
     description: GitHub
     url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/offices.md
+- name: patient
+  description: Patient
+  externalDocs:
+    description: GitHub
+    url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/patients.md
 paths:
   /organization:
     get:
@@ -456,6 +461,37 @@ components:
         timezone:
           type: string
           description: Timezone
+    Patient:
+      type: object
+      properties:
+        uid:
+          type: string
+          description: Unique (for domain) id of patient, no special characters allowed.
+        office_uid:
+          type: string
+          description: UID of valid office.
+        mrn:
+          type: string
+          description: Medical Record Number.
+        name:
+          type: string
+          description: Patient name.
+        surname:
+          type: string
+          description: Patient surname.
+        birth_time:
+          $ref: '#/components/schemas/Timestamp'
+        phone:
+          type: string
+          description: Phone
+        address:
+          $ref: '#/components/schemas/Address'
+    Timestamp:
+      type: string
+      example: 1990-10-04T00:00:00Z
+      externalDocs:
+        description: RFC3339
+        url: https://tools.ietf.org/html/rfc3339
     Address:
       required:
       - street
