@@ -1,0 +1,210 @@
+openapi: 3.0.1
+info:
+  title: RCP Partner API
+  description: RCP Partner API allows managing data related with a single partner
+    through a simple API that have access to any data related to that partner.
+  contact:
+    email: info@remotecarepartners.com
+  version: 0.1.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: https://cloud.hub.remotecarepartners.com/{environment}/netcomp_rcp/rpc/partners/api/v1
+  variables:
+    environment:
+      default: prod
+      enum:
+      - dev
+      - qa
+      - prod
+tags:
+- name: organization
+  description: Organizations
+  externalDocs:
+    description: GitHub
+    url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/organizations.md
+paths:
+  /organization:
+    get:
+      tags:
+      - organization
+      summary: Finds organizations
+      description: Find organizations according to optional filter parameters
+      operationId: getOrganizations
+      parameters:
+      - name: name
+        in: query
+        description: Status values that need to be considered for filter
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+        "400":
+          description: Invalid status value
+          content: {}
+      security:
+      - partner_auth:
+        - read:organization
+    put:
+      tags:
+      - organization
+      summary: Update an existing organization
+      operationId: updateOrganization
+      requestBody:
+        description: Organization object that needs to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organization'
+        required: true
+      responses:
+        "400":
+          description: Invalid ID supplied
+          content: {}
+        "404":
+          description: Organization not found
+          content: {}
+        "405":
+          description: Validation exception
+          content: {}
+      security:
+      - partner_auth:
+        - write:organization
+        - read:organization
+      x-codegen-request-body-name: body
+    post:
+      tags:
+      - organization
+      summary: Add a new organization to the given partner
+      operationId: addOrganization
+      requestBody:
+        description: Organizatoin object that needs to be added
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organization'
+        required: true
+      responses:
+        "405":
+          description: Invalid input
+          content: {}
+      security:
+      - partner_auth:
+        - write:organization
+        - read:organization
+      x-codegen-request-body-name: body
+  /organization/{organizationUid}:
+    get:
+      tags:
+      - organization
+      summary: Find organization by UID
+      description: Returns a single organization
+      operationId: getOrganization
+      parameters:
+      - name: organizationUid
+        in: path
+        description: UID of organization to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        "400":
+          description: Invalid UID supplied
+          content: {}
+        "404":
+          description: Organization not found
+          content: {}
+      security:
+      - partner_auth:
+        - read:organization
+    delete:
+      tags:
+      - organization
+      summary: Deletes an organization
+      operationId: deleteOrganization
+      parameters:
+      - name: organizationUid
+        in: path
+        description: Organization UID to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Invalid UID supplied
+          content: {}
+        "404":
+          description: Organization not found
+          content: {}
+      security:
+      - partner_auth:
+        - write:organization
+        - read:organization
+components:
+  schemas:
+    Organization:
+      type: object
+      properties:
+        uid:
+          type: string
+          description: Unique (for domain) id of organization, no special characters
+            allowed.
+        name:
+          type: string
+          description: User friendly description.
+        phone:
+          type: string
+          description: Phone
+        address:
+          $ref: '#/components/schemas/Address'
+        timezone:
+          type: string
+          description: Timezone (Currently not existing at organization level)
+    Address:
+      required:
+      - street
+      type: object
+      properties:
+        street:
+          type: string
+          description: Street name
+        code:
+          type: string
+          description: ZIP code
+        city:
+          type: string
+          description: City name
+        province:
+          type: string
+          description: Province name
+        state:
+          type: string
+          description: State name
+        country:
+          type: string
+          description: Country name
+  securitySchemes:
+    partner_auth:
+      type: http
+      scheme: basic
