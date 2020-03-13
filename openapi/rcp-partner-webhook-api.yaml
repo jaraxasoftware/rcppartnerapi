@@ -18,6 +18,11 @@ tags:
   externalDocs:
     description: GitHub
     url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/orders.md
+- name: observation
+  description: Observations
+  externalDocs:
+    description: GitHub
+    url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/observations.md
 paths:
   /order/{orderUid}:
     put:
@@ -68,19 +73,195 @@ paths:
         - write:order
         - read:order
       x-codegen-request-body-name: body
+  /observation/{observationUid}:
+    put:
+      tags:
+      - observation
+      summary: Observation has been created in RCP
+      description: A device has taken a measure and it was sent to and processed by
+        RCP
+      operationId: addObservation
+      parameters:
+      - name: observationUid
+        in: path
+        description: UID of added observation
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: observations-016d74a8abb7LlmT4R2chclP5Hm
+      requestBody:
+        description: Observation object that has been added
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Observation'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content: {}
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Order not found
+          content: {}
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - write:order
+        - read:order
+      x-codegen-request-body-name: body
 components:
   schemas:
+    Organization:
+      allOf:
+      - required:
+        - uid
+        type: object
+        properties:
+          uid:
+            type: string
+            description: UID of organization.
+            example: organizations-016e1c60ef5bMfvQH1qKroKZUfJ
+      - $ref: '#/components/schemas/OrganizationExceptUid'
+    OrganizationExceptUid:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: User friendly description.
+          example: Medical Care Ltd.
+        phone:
+          type: string
+          description: Phone (with leading 1)
+          example: "15552106912"
+        address:
+          $ref: '#/components/schemas/Address'
+        timezone:
+          type: string
+          description: Timezone (Currently not existing at organization level)
+          example: US/Eastern
+    Office:
+      allOf:
+      - required:
+        - uid
+        type: object
+        properties:
+          uid:
+            type: string
+            description: UID of office.
+            example: offices-016e21775c54NBNbemXCCVHaqiP
+      - $ref: '#/components/schemas/OfficeExceptUid'
+    OfficeExceptUid:
+      required:
+      - name
+      - organization_uid
+      type: object
+      properties:
+        organization_uid:
+          type: string
+          description: UID of valid organization.
+          example: organizations-016e1c60ef5bMfvQH1qKroKZUfJ
+        name:
+          type: string
+          description: User friendly description.
+          example: Dr. Smith Office
+        phone:
+          type: string
+          description: Phone
+          example: "15552106911"
+        address:
+          $ref: '#/components/schemas/Address'
+        timezone:
+          type: string
+          description: Timezone
+          example: US/Eastern
+    Patient:
+      allOf:
+      - required:
+        - uid
+        type: object
+        properties:
+          uid:
+            type: string
+            description: UID of patient.
+            example: patients-0K58FX811PqZ6fFrOakaxgJZScu
+      - $ref: '#/components/schemas/PatientExceptUid'
+    PatientExceptUid:
+      required:
+      - mrn
+      - name
+      - office_uid
+      type: object
+      properties:
+        office_uid:
+          type: string
+          description: UID of valid office.
+          example: offices-016e21775c54NBNbemXCCVHaqiP
+        mrn:
+          type: string
+          description: Medical Record Number.
+          example: "1234567"
+        name:
+          type: string
+          description: Patient name.
+          example: John
+        surname:
+          type: string
+          description: Patient surname.
+          example: Smith
+        email:
+          type: string
+          description: Patient email.
+          example: john.smith@example.com
+        phone:
+          type: string
+          description: Patient phone
+          example: "15552106914"
+        address:
+          description: Patient address
+          allOf:
+          - $ref: '#/components/schemas/Address'
+        birth_time:
+          type: string
+          description: |
+            Patient birthdate (Required for Bodyfat scale) in RFC3339 format
+            https://tools.ietf.org/html/rfc3339
+          example: 1990-10-04T00:00:00Z
+        height:
+          type: integer
+          description: Patient height in cm (Required for Bodyfat scale)
+          example: 174
     Order:
+      allOf:
+      - required:
+        - uid
+        type: object
+        properties:
+          uid:
+            type: string
+            description: UID of order.
+            example: orders-0K7F30L5AYS6UoiJWDPnLULEKvu
+      - $ref: '#/components/schemas/OrderExceptUid'
+    OrderExceptUid:
       required:
       - device_types
       - patient_uid
-      - uid
       type: object
       properties:
-        uid:
-          type: string
-          description: UID of order.
-          example: orders-0K7F30L5AYS6UoiJWDPnLULEKvu
         patient_uid:
           type: string
           description: UID of valid patient.
@@ -120,7 +301,7 @@ components:
           - scale_bodyfat
           - pulseoximeter
           items:
-            $ref: '#/components/schemas/OrderDevice'
+            $ref: '#/components/schemas/OrderDeviceType'
     Address:
       required:
       - street
@@ -146,7 +327,7 @@ components:
           type: string
           description: Country name
           example: USA
-    OrderDevice:
+    OrderDeviceType:
       type: string
       example: hub
       enum:
@@ -161,6 +342,313 @@ components:
       - glucose
       - thermometer
       - spirometer
+    DeviceHub:
+      allOf:
+      - required:
+        - uid
+        type: object
+        properties:
+          uid:
+            type: string
+            description: UID of devicehub.
+            example: devicehubs-0K6S2DBH7PN4MaHcJPKdH2pxmBY
+      - $ref: '#/components/schemas/DeviceHubExceptUid'
+    DeviceHubExceptUid:
+      required:
+      - hub_id
+      - label
+      type: object
+      properties:
+        hub_id:
+          type: string
+          description: Hub ID (printed in the box and the hub itself).
+          example: "1231233242325"
+        label:
+          type: string
+          description: Label (printed in the box and the hub itself).
+          example: HB01-000-01-01
+        office_uid:
+          type: string
+          description: UID of office managing the hub.
+          example: offices-016e21775c54NBNbemXCCVHaqiP
+        patient_uid:
+          type: string
+          description: UID of valid patient.
+          example: patients-0K58FX811PqZ6fFrOakaxgJZScu
+        status:
+          type: string
+          description: Current Hub status
+          example: connected
+          enum:
+          - connected
+          - disconnected
+    Device:
+      required:
+      - device_id
+      - label
+      - uid
+      type: object
+      properties:
+        uid:
+          type: string
+          description: UID of device.
+          example: devices-016d44fdec60LpOScMr0Cv4hZUU
+        device_id:
+          type: string
+          description: Device ID (printed in the box and the device itself).
+          example: BP01-B0-00
+        label:
+          type: string
+          description: Label (printed in the box and the device itself).
+          example: 7C:01:0A:ED:AE:DF
+        office_uid:
+          type: string
+          description: UID of office managing the hub.
+          example: offices-016e21775c54NBNbemXCCVHaqiP
+        patient_uid:
+          type: string
+          description: UID of valid patient.
+          example: patients-0K58FX811PqZ6fFrOakaxgJZScu
+        hub_uid:
+          type: string
+          description: UID of valid devicehub.
+          example: devicehubs-0K6S2DBH7PN4MaHcJPKdH2pxmBY
+        class:
+          type: string
+          description: Device class
+          example: GL01
+        type:
+          $ref: '#/components/schemas/DeviceType'
+        protocol:
+          $ref: '#/components/schemas/DeviceProtocol'
+        vendor:
+          type: string
+          description: Device vendor
+          example: Andesfit
+        name:
+          type: string
+          description: Device name
+          example: Glucose
+        model:
+          type: string
+          description: Device model
+          example: ADF-B27
+        description:
+          type: string
+          description: Device description
+          example: Blood Glucose Meter
+    DeviceType:
+      type: string
+      description: Device type
+      example: scale
+      enum:
+      - scale
+      - heartrate
+      - pulseoximeter
+      - bpm
+      - glucose
+      - thermometer
+      - spirometer
+    DeviceProtocol:
+      description: Device protocol
+      example: adfb27
+      oneOf:
+      - $ref: '#/components/schemas/DeviceProtocolScale'
+      - $ref: '#/components/schemas/DeviceProtocolPulseoximeter'
+      - $ref: '#/components/schemas/DeviceProtocolBpm'
+      - $ref: '#/components/schemas/DeviceProtocolGlucose'
+      - $ref: '#/components/schemas/DeviceProtocolThermometer'
+      - $ref: '#/components/schemas/DeviceProtocolSpirometer'
+    DeviceProtocolScale:
+      type: string
+      description: |
+        Device protocols for scale type
+        * `adfb883` - Only-weight scale
+        * `adfb885t` - Bodyfat scale
+        * `escs20m` - Bodyfat scale
+      example: adfb885t
+      enum:
+      - adfb883
+      - adfb885t
+      - escs20m
+    DeviceProtocolPulseoximeter:
+      type: string
+      description: Device protocols for pulseoximeter
+      example: adfb06
+      enum:
+      - adfb06
+    DeviceProtocolBpm:
+      type: string
+      description: |
+        Device protocols for blood pressure monitor
+        * `adfb102w` - Wrist BPM
+        * `adfb19` - Arm BPM
+      example: adfb102w
+      enum:
+      - adfb102w
+      - adfb19
+    DeviceProtocolGlucose:
+      type: string
+      description: Device protocols for glucose meter
+      example: adfb27
+      enum:
+      - adfb27
+    DeviceProtocolThermometer:
+      type: string
+      description: |
+        Device protocols for thermometer
+        * `adfb34a` - Tympanum thermometer
+        * `adfb38a` - Surface thermometer
+      example: adfb38a
+      enum:
+      - adfb34a
+      - adfb38a
+    DeviceProtocolSpirometer:
+      type: string
+      description: Device protocols for spirometer
+      example: adfmsa100
+      enum:
+      - adfmsa100
+    Observation:
+      required:
+      - data
+      - device_protocol
+      - device_type
+      - device_uid
+      - label
+      - patient_uid
+      - time
+      - uid
+      type: object
+      properties:
+        uid:
+          type: string
+          description: UID of observation.
+          example: observations-016d74a8abb7LlmT4R2chclP5Hm
+        patient_uid:
+          type: string
+          description: UID of valid patient.
+          example: patients-0K58FX811PqZ6fFrOakaxgJZScu
+        device_uid:
+          type: string
+          description: UID of device.
+          example: devices-016d44fdec60LpOScMr0Cv4hZUU
+        type:
+          $ref: '#/components/schemas/DeviceType'
+        protocol:
+          $ref: '#/components/schemas/DeviceProtocol'
+        data:
+          $ref: '#/components/schemas/ObservationData'
+        time:
+          type: string
+          description: "Observation time in RFC3339 format\n  \nhttps://tools.ietf.org/html/rfc3339\n"
+          example: 2020-01-27T07:35:10Z
+    ObservationData:
+      description: Observation data
+      oneOf:
+      - $ref: '#/components/schemas/ObservationDataScale'
+      - $ref: '#/components/schemas/ObservationDataPulseoximeter'
+      - $ref: '#/components/schemas/ObservationDataBpm'
+      - $ref: '#/components/schemas/ObservationDataGlucose'
+      - $ref: '#/components/schemas/ObservationDataThermometer'
+      - $ref: '#/components/schemas/ObservationDataSpirometer'
+    ObservationDataScale:
+      required:
+      - weight_kgs
+      type: object
+      properties:
+        weight_kgs:
+          type: number
+          description: Weight (in Kgs.)
+          example: 74.2
+        impedance_ohm:
+          type: number
+          description: Impedance (in ohms)
+          example: 474
+      description: Observation data for scale device
+    ObservationDataPulseoximeter:
+      required:
+      - bpm
+      - pi_pct
+      - spo2_pct
+      type: object
+      properties:
+        bpm:
+          type: integer
+          description: Beats per minute
+          example: 60
+        spo2_pct:
+          type: integer
+          description: SPO2 (in %)
+          example: 99
+        pi_pct:
+          type: number
+          description: Perfusion Index (in %)
+          example: 1.1
+      description: Observation data for pulseoximeter device
+    ObservationDataBpm:
+      required:
+      - bpm
+      - pi_pct
+      - spo2_pct
+      type: object
+      properties:
+        bpm:
+          type: integer
+          description: Beats per minute
+          example: 60
+        diastolic_mmHg:
+          type: integer
+          description: Diastolic blood pressure (in mmHg)
+          example: 88
+        systolic_mmHg:
+          type: integer
+          description: Systolic blood pressure (in mmHg)
+          example: 132
+      description: Observation data for blood pressure monitor device
+    ObservationDataGlucose:
+      required:
+      - glucose_mg_dl
+      type: object
+      properties:
+        glucose_mg_dl:
+          type: number
+          description: Concentration of glucose in blood (in mg/dL)
+          example: 100.0
+      description: Observation data for glucose meter device
+    ObservationDataThermometer:
+      required:
+      - temperature_celsius_body
+      type: object
+      properties:
+        temperature_celsius_body:
+          type: number
+          description: Body themperatur (in °C)
+          example: 36.7
+        temperature_celsius_tympanum:
+          type: number
+          description: Tympanum themperatur (in °C)
+          example: 37.1
+        temperature_celsius_surface:
+          type: number
+          description: Surface themperatur (in °C)
+          example: 36.2
+      description: Observation data for thermometer device
+    ObservationDataSpirometer:
+      required:
+      - fev_liters
+      - pef_liters_per_minute
+      type: object
+      properties:
+        fev_liters:
+          type: number
+          description: Forced expiratory volume in 1 minute (in L)
+          example: 0.2
+        pef_liters_per_minute:
+          type: number
+          description: Peak expiratory flow (in L/min)
+          example: 42
+      description: Observation data for spirometer device
     Error:
       required:
       - code
