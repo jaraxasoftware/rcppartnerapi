@@ -1384,13 +1384,17 @@ components:
           description: Device class
           example: GL01
         type:
-          type: string
-          description: Device type
-          example: glucose
+          $ref: '#/components/schemas/DeviceType'
         protocol:
-          type: string
           description: Device protocol
           example: adfb27
+          oneOf:
+          - $ref: '#/components/schemas/DeviceProtocolScale'
+          - $ref: '#/components/schemas/DeviceProtocolPulseoximeter'
+          - $ref: '#/components/schemas/DeviceProtocolBpm'
+          - $ref: '#/components/schemas/DeviceProtocolGlucose'
+          - $ref: '#/components/schemas/DeviceProtocolThermometer'
+          - $ref: '#/components/schemas/DeviceProtocolSpirometer'
         vendor:
           type: string
           description: Device vendor
@@ -1407,6 +1411,68 @@ components:
           type: string
           description: Device description
           example: Blood Glucose Meter
+    DeviceType:
+      type: string
+      description: Device type
+      example: scale
+      enum:
+      - scale
+      - heartrate
+      - pulseoximeter
+      - bpm
+      - glucose
+      - thermometer
+      - spirometer
+    DeviceProtocolScale:
+      type: string
+      description: |
+        Device protocols for scale type
+        * `adfb883` - Only-weight scale
+        * `adfb885t` - Bodyfat scale
+        * `escs20m` - Bodyfat scale
+      example: adfb885t
+      enum:
+      - adfb883
+      - adfb885t
+      - escs20m
+    DeviceProtocolPulseoximeter:
+      type: string
+      description: Device protocols for pulseoximeter
+      example: adfb06
+      enum:
+      - adfb06
+    DeviceProtocolBpm:
+      type: string
+      description: |
+        Device protocols for blood pressure monitor
+        * `adfb102w` - Wrist BPM
+        * `adfb19` - Arm BPM
+      example: adfb102w
+      enum:
+      - adfb102w
+      - adfb19
+    DeviceProtocolGlucose:
+      type: string
+      description: Device protocols for glucose meter
+      example: adfb27
+      enum:
+      - adfb27
+    DeviceProtocolThermometer:
+      type: string
+      description: |
+        Device protocols for thermometer
+        * `adfb34a` - Tympanum thermometer
+        * `adfb38a` - Surface thermometer
+      example: adfb38a
+      enum:
+      - adfb34a
+      - adfb38a
+    DeviceProtocolSpirometer:
+      type: string
+      description: Device protocols for spirometer
+      example: adfmsa100
+      enum:
+      - adfmsa100
     Error:
       required:
       - code
