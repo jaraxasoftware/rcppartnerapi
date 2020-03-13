@@ -98,7 +98,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Organization'
+              $ref: '#/components/schemas/OrganizationExceptUid'
         required: true
       responses:
         "200":
@@ -316,7 +316,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Office'
+              $ref: '#/components/schemas/OfficeExceptUid'
         required: true
       responses:
         "200":
@@ -542,7 +542,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Patient'
+              $ref: '#/components/schemas/PatientExceptUid'
         required: true
       responses:
         "200":
@@ -822,78 +822,134 @@ paths:
 components:
   schemas:
     Organization:
+      allOf:
+      - required:
+        - uid
+        type: object
+        properties:
+          uid:
+            type: string
+            description: UID of organization.
+            example: organizations-016e1c60ef5bMfvQH1qKroKZUfJ
+      - $ref: '#/components/schemas/OrganizationExceptUid'
+    OrganizationExceptUid:
+      required:
+      - name
       type: object
       properties:
-        uid:
-          type: string
-          description: UID of organization.
         name:
           type: string
           description: User friendly description.
+          example: Medical Care Ltd.
         phone:
           type: string
-          description: Phone
+          description: Phone (with leading 1)
+          example: "15552106912"
         address:
           $ref: '#/components/schemas/Address'
         timezone:
           type: string
           description: Timezone (Currently not existing at organization level)
+          example: US/Eastern
     Office:
+      allOf:
+      - required:
+        - uid
+        type: object
+        properties:
+          uid:
+            type: string
+            description: UID of office.
+            example: offices-016e21775c54NBNbemXCCVHaqiP
+      - $ref: '#/components/schemas/OfficeExceptUid'
+    OfficeExceptUid:
+      required:
+      - name
       type: object
       properties:
-        uid:
-          type: string
-          description: UID of office.
         organization_uid:
           type: string
           description: UID of valid organization.
+          example: organizations-016e1c60ef5bMfvQH1qKroKZUfJ
         name:
           type: string
           description: User friendly description.
+          example: Dr. Smith Office
         phone:
           type: string
           description: Phone
+          example: "15552106911"
         address:
           $ref: '#/components/schemas/Address'
         timezone:
           type: string
           description: Timezone
+          example: US/Eastern
     Patient:
+      allOf:
+      - required:
+        - uid
+        type: object
+        properties:
+          uid:
+            type: string
+            description: UID of patient.
+            example: patients-0K58FX811PqZ6fFrOakaxgJZScu
+      - $ref: '#/components/schemas/PatientExceptUid'
+    PatientExceptUid:
       type: object
       properties:
-        uid:
-          type: string
-          description: UID of patient.
         office_uid:
           type: string
           description: UID of valid office.
+          example: offices-016e21775c54NBNbemXCCVHaqiP
         mrn:
           type: string
           description: Medical Record Number.
+          example: "1234567"
         name:
           type: string
           description: Patient name.
+          example: John
         surname:
           type: string
           description: Patient surname.
+          example: Smith
         email:
           type: string
           description: Patient email.
+          example: john.smith@example.com
         phone:
           type: string
           description: Patient phone
+          example: "15552106914"
         address:
           description: Patient address
           allOf:
           - $ref: '#/components/schemas/Address'
         birth_time:
+          type: string
           description: Patient birthdate (Required for Bodyfat scale)
-          allOf:
-          - $ref: '#/components/schemas/Timestamp'
+          example: 1990-10-04T00:00:00Z
+          externalDocs:
+            description: RFC3339
+            url: https://tools.ietf.org/html/rfc3339
         height:
           type: integer
           description: Patient height in cm (Required for Bodyfat scale)
+          example: 174
     Order:
+      allOf:
+      - required:
+        - uid
+        type: object
+        properties:
+          uid:
+            type: string
+            description: UID of order.
+            example: orders-0K7F30L5AYS6UoiJWDPnLULEKvu
+      - $ref: '#/components/schemas/OrderExceptUid'
+    OrderExceptUid:
       type: object
       properties:
         uid:
@@ -929,12 +985,6 @@ components:
           description: Ordered device types
           items:
             $ref: '#/components/schemas/OrderDevice'
-    Timestamp:
-      type: string
-      example: 1990-10-04T00:00:00Z
-      externalDocs:
-        description: RFC3339
-        url: https://tools.ietf.org/html/rfc3339
     Address:
       required:
       - street
