@@ -1622,7 +1622,68 @@ components:
           description: "Observation time in RFC3339 format\n  \nhttps://tools.ietf.org/html/rfc3339\n"
           example: 2020-01-27T07:35:10Z
     ObservationData:
+      description: Observation data
+      oneOf:
+      - $ref: '#/components/schemas/ObservationDataScale'
+      - $ref: '#/components/schemas/ObservationDataPulseoximeter'
+      - $ref: '#/components/schemas/ObservationDataBpm'
+      - $ref: '#/components/schemas/ObservationDataGlucose'
+      - $ref: '#/components/schemas/ObservationDataThermometer'
+      - $ref: '#/components/schemas/ObservationDataSpirometer'
+    ObservationDataScale:
+      required:
+      - weight_kgs
       type: object
+      properties:
+        weight_kgs:
+          type: number
+          description: Weight (in Kgs.)
+          example: 74.2
+        impedance_ohm:
+          type: number
+          description: Impedance (in ohms)
+          example: 474
+      description: Observation data for scale device
+    ObservationDataPulseoximeter:
+      required:
+      - bpm
+      - pi_pct
+      - spo2_pct
+      type: object
+      properties:
+        bpm:
+          type: integer
+          description: Beats per minute
+          example: 60
+        spo2_pct:
+          type: integer
+          description: SPO2 (in %)
+          example: 99
+        pi_pct:
+          type: number
+          description: Perfusion Index (in %)
+          example: 1.1
+      description: Observation data for pulseoximeter device
+    ObservationDataBpm:
+      required:
+      - bpm
+      - pi_pct
+      - spo2_pct
+      type: object
+      properties:
+        bpm:
+          type: integer
+          description: Beats per minute
+          example: 60
+        diastolic_mmHg:
+          type: integer
+          description: Diastolic blood pressure (in mmHg)
+          example: 88
+        systolic_mmHg:
+          type: integer
+          description: Systolic blood pressure (in mmHg)
+          example: 132
+      description: Observation data for blood pressure monitor device
     Error:
       required:
       - code
