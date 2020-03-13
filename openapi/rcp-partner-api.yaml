@@ -56,6 +56,7 @@ paths:
         explode: true
         schema:
           type: string
+        example: Mar
       - name: phone
         in: query
         description: Phone prefix to search for
@@ -64,6 +65,7 @@ paths:
         explode: true
         schema:
           type: string
+        example: 1555
       responses:
         "200":
           description: Successful operation
@@ -140,6 +142,7 @@ paths:
         explode: false
         schema:
           type: string
+        example: organizations-016e1c60ef5bMfvQH1qKroKZUfJ
       responses:
         "200":
           description: Successful operation
@@ -179,6 +182,7 @@ paths:
         explode: false
         schema:
           type: string
+        example: organizations-016e1c60ef5bMfvQH1qKroKZUfJ
       requestBody:
         description: Organization object that needs to be updated
         content:
@@ -227,6 +231,7 @@ paths:
         explode: false
         schema:
           type: string
+        example: organizations-016e1c60ef5bMfvQH1qKroKZUfJ
       responses:
         "200":
           description: Successful operation
@@ -266,6 +271,7 @@ paths:
         explode: true
         schema:
           type: string
+        example: Medi
       - name: phone
         in: query
         description: Phone prefix to search for
@@ -274,6 +280,7 @@ paths:
         explode: true
         schema:
           type: string
+        example: 15552
       - name: organization_uid
         in: query
         description: organization_uid to search for
@@ -282,6 +289,7 @@ paths:
         explode: true
         schema:
           type: string
+        example: organizations-016e1c60ef5bMfvQH1qKroKZUfJ
       responses:
         "200":
           description: Successful operation
@@ -358,6 +366,7 @@ paths:
         explode: false
         schema:
           type: string
+        example: offices-016e21775c54NBNbemXCCVHaqiP
       responses:
         "200":
           description: Successful operation
@@ -397,6 +406,7 @@ paths:
         explode: false
         schema:
           type: string
+        example: offices-016e21775c54NBNbemXCCVHaqiP
       requestBody:
         description: Office object that needs to be updated
         content:
@@ -445,6 +455,7 @@ paths:
         explode: false
         schema:
           type: string
+        example: offices-016e21775c54NBNbemXCCVHaqiP
       responses:
         "200":
           description: Successful operation
@@ -484,6 +495,7 @@ paths:
         explode: true
         schema:
           type: string
+        example: Char
       - name: phone
         in: query
         description: Phone prefix to search for
@@ -492,6 +504,7 @@ paths:
         explode: true
         schema:
           type: string
+        example: 15552
       - name: office_uid
         in: query
         description: office_uid to search for
@@ -500,6 +513,7 @@ paths:
         explode: true
         schema:
           type: string
+        example: offices-016e21775c54NBNbemXCCVHaqiP
       - name: organization_uid
         in: query
         description: organization_uid to search for
@@ -508,6 +522,7 @@ paths:
         explode: true
         schema:
           type: string
+        example: organizations-016e1c60ef5bMfvQH1qKroKZUfJ
       responses:
         "200":
           description: Successful operation
@@ -584,6 +599,7 @@ paths:
         explode: false
         schema:
           type: string
+        example: patients-0K58FX811PqZ6fFrOakaxgJZScu
       responses:
         "200":
           description: Successful operation
@@ -623,6 +639,7 @@ paths:
         explode: false
         schema:
           type: string
+        example: patients-0K58FX811PqZ6fFrOakaxgJZScu
       requestBody:
         description: Patient object that needs to be updated
         content:
@@ -671,6 +688,7 @@ paths:
         explode: false
         schema:
           type: string
+        example: patients-0K58FX811PqZ6fFrOakaxgJZScu
       responses:
         "200":
           description: Successful operation
@@ -710,6 +728,7 @@ paths:
         explode: true
         schema:
           type: string
+        example: created
       - name: patient_uid
         in: query
         description: patient_uid to search for
@@ -718,6 +737,7 @@ paths:
         explode: true
         schema:
           type: string
+        example: patients-0K58FX811PqZ6fFrOakaxgJZScu
       responses:
         "200":
           description: Successful operation
@@ -794,6 +814,7 @@ paths:
         explode: false
         schema:
           type: string
+        example: orders-0K7F30L5AYS6UoiJWDPnLULEKvu
       responses:
         "200":
           description: Successful operation
