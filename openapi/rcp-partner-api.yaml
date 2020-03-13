@@ -22,20 +22,35 @@ tags:
     description: GitHub
     url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/organizations.md
 - name: office
-  description: Office (aka Branch)
+  description: Offices (aka Branches)
   externalDocs:
     description: GitHub
     url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/offices.md
 - name: patient
-  description: Patient
+  description: Patients
   externalDocs:
     description: GitHub
     url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/patients.md
 - name: order
-  description: Order
+  description: Orders
   externalDocs:
     description: GitHub
     url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/orders.md
+- name: devicehub
+  description: Device Hubs
+  externalDocs:
+    description: GitHub
+    url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/devicehubs.md
+- name: device
+  description: Devices
+  externalDocs:
+    description: GitHub
+    url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/devices.md
+- name: observation
+  description: Observations
+  externalDocs:
+    description: GitHub
+    url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/observations.md
 paths:
   /organization:
     get:
