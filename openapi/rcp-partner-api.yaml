@@ -955,6 +955,9 @@ components:
             example: orders-0K7F30L5AYS6UoiJWDPnLULEKvu
       - $ref: '#/components/schemas/OrderExceptUid'
     OrderExceptUid:
+      required:
+      - device_types
+      - patient_uid
       type: object
       properties:
         patient_uid:
@@ -970,23 +973,31 @@ components:
           - closed
         name:
           type: string
-          description: Contact name.
+          description: Contact name (overrides patient one).
+          example: Jane
         surname:
           type: string
-          description: Contact surname.
+          description: Contact surname (overrides patient one).
+          example: Smith
         email:
           type: string
-          description: Contact email.
+          description: Contact email (overrides patient one).
+          example: jane.smith@example.com
         phone:
           type: string
           description: Contact phone
+          example: "15552106915"
         address:
-          description: Contact address
+          description: Contact address (overrides patient one).
           allOf:
           - $ref: '#/components/schemas/Address'
         device_types:
           type: array
           description: Ordered device types
+          example:
+          - hub
+          - scale_bodyfat
+          - pulseoximeter
           items:
             $ref: '#/components/schemas/OrderDevice'
     Address:
@@ -997,23 +1008,26 @@ components:
         street:
           type: string
           description: Street name
+          example: 1265 Borregas Ave.
         code:
           type: string
           description: ZIP code
+          example: "94086"
         city:
           type: string
           description: City name
-        province:
-          type: string
-          description: Province name
+          example: Sunnyvale
         state:
           type: string
           description: State name
+          example: CA
         country:
           type: string
           description: Country name
+          example: USA
     OrderDevice:
       type: string
+      example: hub
       enum:
       - hub
       - scale_bodyfat
@@ -1035,9 +1049,11 @@ components:
         code:
           type: string
           description: Error code
+          example: invalid_parameter
         description:
           type: string
           description: Error description in English
+          example: 'Invalid parameter found: test'
   securitySchemes:
     partner_auth:
       type: http
