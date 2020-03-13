@@ -752,7 +752,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Order'
+              $ref: '#/components/schemas/OrderExceptUid'
         required: true
       responses:
         "200":
@@ -865,6 +865,7 @@ components:
     OfficeExceptUid:
       required:
       - name
+      - organization_uid
       type: object
       properties:
         organization_uid:
@@ -897,6 +898,10 @@ components:
             example: patients-0K58FX811PqZ6fFrOakaxgJZScu
       - $ref: '#/components/schemas/PatientExceptUid'
     PatientExceptUid:
+      required:
+      - mrn
+      - name
+      - office_uid
       type: object
       properties:
         office_uid:
@@ -952,15 +957,14 @@ components:
     OrderExceptUid:
       type: object
       properties:
-        uid:
-          type: string
-          description: UID of order.
         patient_uid:
           type: string
           description: UID of valid patient.
+          example: patients-0K58FX811PqZ6fFrOakaxgJZScu
         status:
           type: string
           description: Order status
+          example: created
           enum:
           - created
           - closed
