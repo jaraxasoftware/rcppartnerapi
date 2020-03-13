@@ -1619,10 +1619,14 @@ components:
           $ref: '#/components/schemas/ObservationData'
         time:
           type: string
-          description: "Observation time in RFC3339 format\n  \nhttps://tools.ietf.org/html/rfc3339\n"
+          description: |
+            Observation time in RFC3339 format
+            https://tools.ietf.org/html/rfc3339
           example: 2020-01-27T07:35:10Z
     ObservationData:
       description: Observation data
+      example:
+        weight_kgs: 74.2
       oneOf:
       - $ref: '#/components/schemas/ObservationDataScale'
       - $ref: '#/components/schemas/ObservationDataPulseoximeter'
