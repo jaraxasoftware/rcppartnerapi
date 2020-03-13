@@ -11,7 +11,7 @@ servers:
   variables:
     customerUrl:
       description: Customer Webhook URL
-      default: rennovahealth.com/rpcwebhook
+      default: renovahealth.care/rpcwebhook
 tags:
 - name: order
   description: Order
