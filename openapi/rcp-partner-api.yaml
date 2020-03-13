@@ -1684,6 +1684,49 @@ components:
           description: Systolic blood pressure (in mmHg)
           example: 132
       description: Observation data for blood pressure monitor device
+    ObservationDataGlucose:
+      required:
+      - glucose_mg_dl
+      type: object
+      properties:
+        glucose_mg_dl:
+          type: number
+          description: Concentration of glucose in blood (in mg/dL)
+          example: 100.0
+      description: Observation data for glucose meter device
+    ObservationDataThermometer:
+      required:
+      - temperature_celsius_body
+      type: object
+      properties:
+        temperature_celsius_body:
+          type: number
+          description: Body themperatur (in °C)
+          example: 36.7
+        temperature_celsius_tympanum:
+          type: number
+          description: Tympanum themperatur (in °C)
+          example: 37.1
+        temperature_celsius_surface:
+          type: number
+          description: Surface themperatur (in °C)
+          example: 36.2
+      description: Observation data for thermometer device
+    ObservationDataSpirometer:
+      required:
+      - fev_liters
+      - pef_liters_per_minute
+      type: object
+      properties:
+        fev_liters:
+          type: number
+          description: Forced expiratory volume in 1 minute (in L)
+          example: 0.2
+        pef_liters_per_minute:
+          type: number
+          description: Peak expiratory flow (in L/min)
+          example: 42
+      description: Observation data for spirometer device
     Error:
       required:
       - code
