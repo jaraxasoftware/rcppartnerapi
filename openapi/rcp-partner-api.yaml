@@ -88,45 +88,6 @@ paths:
       security:
       - partner_auth:
         - read:organization
-    put:
-      tags:
-      - organization
-      summary: Update an existing organization
-      operationId: updateOrganization
-      requestBody:
-        description: Organization object that needs to be updated
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Organization'
-        required: true
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Organization'
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        "404":
-          description: Organization not found
-          content: {}
-        "406":
-          description: Accepted media type not supported
-          content: {}
-        "415":
-          description: Unsupported media type
-          content: {}
-      security:
-      - partner_auth:
-        - write:organization
-        - read:organization
-      x-codegen-request-body-name: body
     post:
       tags:
       - organization
@@ -204,6 +165,54 @@ paths:
       security:
       - partner_auth:
         - read:organization
+    put:
+      tags:
+      - organization
+      summary: Update an existing organization
+      operationId: updateOrganization
+      parameters:
+      - name: organizationUid
+        in: path
+        description: UID of organization to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Organization object that needs to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organization'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Organization not found
+          content: {}
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - write:organization
+        - read:organization
+      x-codegen-request-body-name: body
     delete:
       tags:
       - organization
@@ -297,45 +306,6 @@ paths:
       security:
       - partner_auth:
         - read:office
-    put:
-      tags:
-      - office
-      summary: Update an existing office
-      operationId: updateOffice
-      requestBody:
-        description: Office object that needs to be updated
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Office'
-        required: true
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Office'
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        "404":
-          description: Office not found
-          content: {}
-        "406":
-          description: Accepted media type not supported
-          content: {}
-        "415":
-          description: Unsupported media type
-          content: {}
-      security:
-      - partner_auth:
-        - write:office
-        - read:office
-      x-codegen-request-body-name: body
     post:
       tags:
       - office
@@ -413,6 +383,54 @@ paths:
       security:
       - partner_auth:
         - read:office
+    put:
+      tags:
+      - office
+      summary: Update an existing office
+      operationId: updateOffice
+      parameters:
+      - name: officeUid
+        in: path
+        description: UID of office to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Office object that needs to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Office'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Office'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Office not found
+          content: {}
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - write:office
+        - read:office
+      x-codegen-request-body-name: body
     delete:
       tags:
       - office
@@ -514,45 +532,6 @@ paths:
       security:
       - partner_auth:
         - read:patient
-    put:
-      tags:
-      - patient
-      summary: Update an existing patient
-      operationId: updatePatient
-      requestBody:
-        description: Patient object that needs to be updated
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Patient'
-        required: true
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Patient'
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        "404":
-          description: Patient not found
-          content: {}
-        "406":
-          description: Accepted media type not supported
-          content: {}
-        "415":
-          description: Unsupported media type
-          content: {}
-      security:
-      - partner_auth:
-        - write:patient
-        - read:patient
-      x-codegen-request-body-name: body
     post:
       tags:
       - patient
@@ -630,6 +609,54 @@ paths:
       security:
       - partner_auth:
         - read:patient
+    put:
+      tags:
+      - patient
+      summary: Update an existing patient
+      operationId: updatePatient
+      parameters:
+      - name: patientUid
+        in: path
+        description: UID of patient to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Patient object that needs to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Patient not found
+          content: {}
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - write:patient
+        - read:patient
+      x-codegen-request-body-name: body
     delete:
       tags:
       - patient
@@ -715,45 +742,6 @@ paths:
       security:
       - partner_auth:
         - read:order
-    put:
-      tags:
-      - order
-      summary: Update an existing order
-      operationId: updateOrder
-      requestBody:
-        description: Order object that needs to be updated
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Order'
-        required: true
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        "404":
-          description: Order not found
-          content: {}
-        "406":
-          description: Accepted media type not supported
-          content: {}
-        "415":
-          description: Unsupported media type
-          content: {}
-      security:
-      - partner_auth:
-        - write:order
-        - read:order
-      x-codegen-request-body-name: body
     post:
       tags:
       - order
@@ -831,6 +819,54 @@ paths:
       security:
       - partner_auth:
         - read:order
+    put:
+      tags:
+      - order
+      summary: Update an existing order
+      operationId: updateOrder
+      parameters:
+      - name: orderUid
+        in: path
+        description: UID of order to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Order object that needs to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Order not found
+          content: {}
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - write:order
+        - read:order
+      x-codegen-request-body-name: body
     delete:
       tags:
       - order
