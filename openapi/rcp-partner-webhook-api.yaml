@@ -22,7 +22,7 @@ tags:
     description: GitHub
     url: https://github.com/netscale-technologies/netcomp_rcp_doc/blob/prod/doc/orders.md
 paths:
-  /order:
+  /order/{orderUid}:
     put:
       tags:
       - order
@@ -30,6 +30,15 @@ paths:
       description: Typical scenario is order being processed (status = closed) and
         hub/devices being assigned to patient and sent
       operationId: updateOrder
+      parameters:
+      - name: orderUid
+        in: path
+        description: UID of updated order
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         description: Order object that has been updated
         content:
