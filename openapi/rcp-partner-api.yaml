@@ -1386,15 +1386,7 @@ components:
         type:
           $ref: '#/components/schemas/DeviceType'
         protocol:
-          description: Device protocol
-          example: adfb27
-          oneOf:
-          - $ref: '#/components/schemas/DeviceProtocolScale'
-          - $ref: '#/components/schemas/DeviceProtocolPulseoximeter'
-          - $ref: '#/components/schemas/DeviceProtocolBpm'
-          - $ref: '#/components/schemas/DeviceProtocolGlucose'
-          - $ref: '#/components/schemas/DeviceProtocolThermometer'
-          - $ref: '#/components/schemas/DeviceProtocolSpirometer'
+          $ref: '#/components/schemas/DeviceProtocol'
         vendor:
           type: string
           description: Device vendor
@@ -1423,6 +1415,16 @@ components:
       - glucose
       - thermometer
       - spirometer
+    DeviceProtocol:
+      description: Device protocol
+      example: adfb27
+      oneOf:
+      - $ref: '#/components/schemas/DeviceProtocolScale'
+      - $ref: '#/components/schemas/DeviceProtocolPulseoximeter'
+      - $ref: '#/components/schemas/DeviceProtocolBpm'
+      - $ref: '#/components/schemas/DeviceProtocolGlucose'
+      - $ref: '#/components/schemas/DeviceProtocolThermometer'
+      - $ref: '#/components/schemas/DeviceProtocolSpirometer'
     DeviceProtocolScale:
       type: string
       description: |
