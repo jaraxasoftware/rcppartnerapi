@@ -1081,6 +1081,125 @@ paths:
       security:
       - partner_auth:
         - read:device
+  /observation:
+    get:
+      tags:
+      - observation
+      summary: Finds observations
+      description: Find observations according to optional filter parameters
+      operationId: getObservations
+      parameters:
+      - name: label
+        in: query
+        description: Observation label to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: BP01-B0-00
+      - name: device_uid
+        in: query
+        description: device_uid to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: devices-016d44fdec60LpOScMr0Cv4hZUU
+      - name: patient_uid
+        in: query
+        description: patient_uid to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: patients-0K58FX811PqZ6fFrOakaxgJZScu
+      - name: start_time
+        in: query
+        description: "Start time in RFC3339 format\n  \nhttps://tools.ietf.org/html/rfc3339\n"
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 2020-02-01T00:00:00Z
+      - name: stop_time
+        in: query
+        description: "Stop time in RFC3339 format\n  \nhttps://tools.ietf.org/html/rfc3339\n"
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 2020-03-01T00:00:00Z
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Observation'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - read:observation
+  /observation/{observationUid}:
+    get:
+      tags:
+      - observation
+      summary: Find observation by UID
+      description: Returns a single observation
+      operationId: getObservation
+      parameters:
+      - name: observationUid
+        in: path
+        description: UID of observation to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: observations-016d74a8abb7LlmT4R2chclP5Hm
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Observation'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Observation not found
+          content: {}
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - read:observation
 components:
   schemas:
     Organization:
@@ -1196,11 +1315,10 @@ components:
           - $ref: '#/components/schemas/Address'
         birth_time:
           type: string
-          description: Patient birthdate (Required for Bodyfat scale)
+          description: |
+            Patient birthdate (Required for Bodyfat scale) in RFC3339 format
+            https://tools.ietf.org/html/rfc3339
           example: 1990-10-04T00:00:00Z
-          externalDocs:
-            description: RFC3339
-            url: https://tools.ietf.org/html/rfc3339
         height:
           type: integer
           description: Patient height in cm (Required for Bodyfat scale)
@@ -1343,22 +1461,16 @@ components:
           - connected
           - disconnected
     Device:
-      allOf:
-      - required:
-        - uid
-        type: object
-        properties:
-          uid:
-            type: string
-            description: UID of devicehub.
-            example: devices-016d44fdec60LpOScMr0Cv4hZUU
-      - $ref: '#/components/schemas/DeviceExceptUid'
-    DeviceExceptUid:
       required:
       - device_id
       - label
+      - uid
       type: object
       properties:
+        uid:
+          type: string
+          description: UID of device.
+          example: devices-016d44fdec60LpOScMr0Cv4hZUU
         device_id:
           type: string
           description: Device ID (printed in the box and the device itself).
@@ -1475,6 +1587,42 @@ components:
       example: adfmsa100
       enum:
       - adfmsa100
+    Observation:
+      required:
+      - data
+      - device_protocol
+      - device_type
+      - device_uid
+      - label
+      - patient_uid
+      - time
+      - uid
+      type: object
+      properties:
+        uid:
+          type: string
+          description: UID of observation.
+          example: observations-016d74a8abb7LlmT4R2chclP5Hm
+        patient_uid:
+          type: string
+          description: UID of valid patient.
+          example: patients-0K58FX811PqZ6fFrOakaxgJZScu
+        device_uid:
+          type: string
+          description: UID of device.
+          example: devices-016d44fdec60LpOScMr0Cv4hZUU
+        type:
+          $ref: '#/components/schemas/DeviceType'
+        protocol:
+          $ref: '#/components/schemas/DeviceProtocol'
+        data:
+          $ref: '#/components/schemas/ObservationData'
+        time:
+          type: string
+          description: "Observation time in RFC3339 format\n  \nhttps://tools.ietf.org/html/rfc3339\n"
+          example: 2020-01-27T07:35:10Z
+    ObservationData:
+      type: object
     Error:
       required:
       - code
