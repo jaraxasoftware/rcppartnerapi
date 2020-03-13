@@ -868,7 +868,7 @@ paths:
         explode: true
         schema:
           type: string
-        example: HB01-000-01-01
+        example: 1231233242325
       - name: label
         in: query
         description: Hub label to search for
@@ -877,7 +877,7 @@ paths:
         explode: true
         schema:
           type: string
-        example: 1231233242325
+        example: HB01-000-01-01
       - name: office_uid
         in: query
         description: office_uid to search for
@@ -962,6 +962,125 @@ paths:
       security:
       - partner_auth:
         - read:devicehub
+  /device:
+    get:
+      tags:
+      - device
+      summary: Finds devices
+      description: Find devices according to optional filter parameters
+      operationId: getDevices
+      parameters:
+      - name: device_id
+        in: query
+        description: Device id to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 7C:01:0A:ED:AE:DF
+      - name: label
+        in: query
+        description: Device label to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: BP01-B0-00
+      - name: office_uid
+        in: query
+        description: office_uid to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: offices-016e21775c54NBNbemXCCVHaqiP
+      - name: patient_uid
+        in: query
+        description: patient_uid to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: patients-0K58FX811PqZ6fFrOakaxgJZScu
+      - name: hub_uid
+        in: query
+        description: hub_uid to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: devicehubs-0K6S2DBH7PN4MaHcJPKdH2pxmBY
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - read:device
+  /device/{deviceUid}:
+    get:
+      tags:
+      - device
+      summary: Find device by UID
+      description: Returns a single device
+      operationId: getDevice
+      parameters:
+      - name: deviceUid
+        in: path
+        description: UID of device to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: devicehubs-0K6S2DBH7PN4MaHcJPKdH2pxmBY
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Device not found
+          content: {}
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - read:device
 components:
   schemas:
     Organization:
@@ -1142,7 +1261,7 @@ components:
           - scale_bodyfat
           - pulseoximeter
           items:
-            $ref: '#/components/schemas/OrderDevice'
+            $ref: '#/components/schemas/OrderDeviceType'
     Address:
       required:
       - street
@@ -1168,7 +1287,7 @@ components:
           type: string
           description: Country name
           example: USA
-    OrderDevice:
+    OrderDeviceType:
       type: string
       example: hub
       enum:
@@ -1203,11 +1322,11 @@ components:
         hub_id:
           type: string
           description: Hub ID (printed in the box and the hub itself).
-          example: HB01-000-01-01
+          example: "1231233242325"
         label:
           type: string
           description: Label (printed in the box and the hub itself).
-          example: "1231233242325"
+          example: HB01-000-01-01
         office_uid:
           type: string
           description: UID of office managing the hub.
@@ -1223,6 +1342,71 @@ components:
           enum:
           - connected
           - disconnected
+    Device:
+      allOf:
+      - required:
+        - uid
+        type: object
+        properties:
+          uid:
+            type: string
+            description: UID of devicehub.
+            example: devices-016d44fdec60LpOScMr0Cv4hZUU
+      - $ref: '#/components/schemas/DeviceExceptUid'
+    DeviceExceptUid:
+      required:
+      - device_id
+      - label
+      type: object
+      properties:
+        device_id:
+          type: string
+          description: Device ID (printed in the box and the device itself).
+          example: BP01-B0-00
+        label:
+          type: string
+          description: Label (printed in the box and the device itself).
+          example: 7C:01:0A:ED:AE:DF
+        office_uid:
+          type: string
+          description: UID of office managing the hub.
+          example: offices-016e21775c54NBNbemXCCVHaqiP
+        patient_uid:
+          type: string
+          description: UID of valid patient.
+          example: patients-0K58FX811PqZ6fFrOakaxgJZScu
+        hub_uid:
+          type: string
+          description: UID of valid devicehub.
+          example: devicehubs-0K6S2DBH7PN4MaHcJPKdH2pxmBY
+        class:
+          type: string
+          description: Device class
+          example: GL01
+        type:
+          type: string
+          description: Device type
+          example: glucose
+        protocol:
+          type: string
+          description: Device protocol
+          example: adfb27
+        vendor:
+          type: string
+          description: Device vendor
+          example: Andesfit
+        name:
+          type: string
+          description: Device name
+          example: Glucose
+        model:
+          type: string
+          description: Device model
+          example: ADF-B27
+        description:
+          type: string
+          description: Device description
+          example: Blood Glucose Meter
     Error:
       required:
       - code
