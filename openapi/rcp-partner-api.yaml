@@ -852,6 +852,116 @@ paths:
       security:
       - partner_auth:
         - read:order
+  /devicehub:
+    get:
+      tags:
+      - devicehub
+      summary: Finds devicehubs
+      description: Find devicehubs according to optional filter parameters
+      operationId: getDeviceHubs
+      parameters:
+      - name: hub_id
+        in: query
+        description: Hub id to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: HB01-000-01-01
+      - name: label
+        in: query
+        description: Hub label to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 1231233242325
+      - name: office_uid
+        in: query
+        description: office_uid to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: offices-016e21775c54NBNbemXCCVHaqiP
+      - name: patient_uid
+        in: query
+        description: patient_uid to search for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: patients-0K58FX811PqZ6fFrOakaxgJZScu
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeviceHub'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - read:devicehub
+  /devicehub/{deviceHubUid}:
+    get:
+      tags:
+      - devicehub
+      summary: Find devicehub by UID
+      description: Returns a single devicehub
+      operationId: getDeviceHub
+      parameters:
+      - name: deviceHubUid
+        in: path
+        description: UID of devicehub to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: devicehubs-016e21775c54NBNbemXCCVHaqiP
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceHub'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: DeviceHub not found
+          content: {}
+        "406":
+          description: Accepted media type not supported
+          content: {}
+        "415":
+          description: Unsupported media type
+          content: {}
+      security:
+      - partner_auth:
+        - read:devicehub
 components:
   schemas:
     Organization:
@@ -1073,6 +1183,46 @@ components:
       - glucose
       - thermometer
       - spirometer
+    DeviceHub:
+      allOf:
+      - required:
+        - uid
+        type: object
+        properties:
+          uid:
+            type: string
+            description: UID of devicehub.
+            example: devicehubs-0K6S2DBH7PN4MaHcJPKdH2pxmBY
+      - $ref: '#/components/schemas/DeviceHubExceptUid'
+    DeviceHubExceptUid:
+      required:
+      - hub_id
+      - label
+      type: object
+      properties:
+        hub_id:
+          type: string
+          description: Hub ID (printed in the box and the hub itself).
+          example: HB01-000-01-01
+        label:
+          type: string
+          description: Label (printed in the box and the hub itself).
+          example: "1231233242325"
+        office_uid:
+          type: string
+          description: UID of office managing the hub.
+          example: offices-016e21775c54NBNbemXCCVHaqiP
+        patient_uid:
+          type: string
+          description: UID of valid patient.
+          example: patients-0K58FX811PqZ6fFrOakaxgJZScu
+        status:
+          type: string
+          description: Current Hub status
+          example: connected
+          enum:
+          - connected
+          - disconnected
     Error:
       required:
       - code
