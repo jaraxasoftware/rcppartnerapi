@@ -266,6 +266,10 @@ components:
           type: string
           description: UID of valid patient.
           example: patients-0K58FX811PqZ6fFrOakaxgJZScu
+        patient_mrn:
+          type: string
+          description: Medical Record Number.
+          example: "1234567"
         status:
           type: string
           description: Order status
@@ -302,6 +306,10 @@ components:
           - pulseoximeter
           items:
             $ref: '#/components/schemas/OrderDeviceType'
+        shipment:
+          description: Shipment details
+          allOf:
+          - $ref: '#/components/schemas/Shipment'
     Address:
       required:
       - street
@@ -653,6 +661,20 @@ components:
           description: Peak expiratory flow (in L/min)
           example: 42
       description: Observation data for spirometer device
+    Shipment:
+      required:
+      - carrier
+      - tracking_number
+      type: object
+      properties:
+        carrier:
+          type: string
+          description: Carrier
+          example: FedEx
+        tracking_number:
+          type: string
+          description: Tracking Number
+          example: FED489950398
     Error:
       required:
       - code
