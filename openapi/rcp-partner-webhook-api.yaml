@@ -259,6 +259,7 @@ components:
     OrderExceptUid:
       required:
       - device_types
+      - patient_mrn
       - patient_uid
       type: object
       properties:
@@ -524,8 +525,10 @@ components:
       - device_type
       - device_uid
       - label
+      - measure_time
+      - patient_mrn
       - patient_uid
-      - time
+      - reception_time
       - uid
       type: object
       properties:
@@ -537,6 +540,10 @@ components:
           type: string
           description: UID of valid patient.
           example: patients-0K58FX811PqZ6fFrOakaxgJZScu
+        patient_mrn:
+          type: string
+          description: Medical Record Number.
+          example: "1234567"
         device_uid:
           type: string
           description: UID of device.
@@ -547,12 +554,18 @@ components:
           $ref: '#/components/schemas/DeviceProtocol'
         data:
           $ref: '#/components/schemas/ObservationData'
-        time:
+        measure_time:
           type: string
           description: |
             Observation time in RFC3339 format
             https://tools.ietf.org/html/rfc3339
           example: 2020-01-27T07:35:10Z
+        reception_time:
+          type: string
+          description: |
+            Reception time in RFC3339 format
+            https://tools.ietf.org/html/rfc3339
+          example: 2020-01-27T07:40:23Z
     ObservationData:
       description: Observation data
       example:
