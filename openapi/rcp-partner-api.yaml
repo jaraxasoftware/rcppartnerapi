@@ -1529,7 +1529,7 @@ components:
       - spirometer
     DeviceProtocol:
       description: Device protocol
-      example: adfb27
+      example: adfb883
       oneOf:
       - $ref: '#/components/schemas/DeviceProtocolScale'
       - $ref: '#/components/schemas/DeviceProtocolPulseoximeter'
@@ -1724,7 +1724,7 @@ components:
       properties:
         fev_liters:
           type: number
-          description: Forced expiratory volume in 1 minute (in L)
+          description: Forced expiratory volume in 1 second (in L)
           example: 0.2
         pef_liters_per_minute:
           type: number
